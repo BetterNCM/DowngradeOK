@@ -1,9 +1,8 @@
 plugin.onLoad(({pluginPath})=>{
-    //降级网易云前端至 2.10.2
     const is300 = APP_CONF.appver.startsWith('3.');
     if (is300) {
         const iframe = document.createElement('iframe');
-        iframe.src = 'http://192.168.31.246:5500';pluginPath + '/index.html';
+        iframe.src = pluginPath + '/index.html'; // 'http://192.168.31.246:5500';
         window.dgOk_pluginPath = pluginPath;
         iframe.style.position = 'fixed';
         iframe.style.top = '0';

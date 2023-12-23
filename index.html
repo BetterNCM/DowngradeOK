@@ -65,8 +65,8 @@
     }
     const checkAndDownloadResource = async () => {
         if (parent.window.betterncm_native.fs.exists(DATA_DIR + '/' + SAVE_FILENAME)) {
-            switchToPage('3');
-            unzipResource()
+            switchToPage('4');
+            // unzipResource()
             return;
         }
         const res = await fetch(NCM21012);
@@ -94,17 +94,18 @@
         parent.window.betterncm.fs.writeFile(
             DATA_DIR + '/' + SAVE_FILENAME,
             blob).then(() => {
-                switchToPage('3');
-                unzipResource()
+                switchToPage('4');
+                // unzipResource()
             })
     }
     const runDowngrade = async () => {
+        const cmdUnlock = `powershell Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser -Force`
+        await parent.window.betterncm.app.exec(cmdUnlock, 1, 1)
+        await new Promise((resolve) => setTimeout(resolve, 500));
         const PathScript = parent.window.dgOk_pluginPath + '/downgrade.ps1';
-        const cmd = `powershell ${esc(PathScript)} ${esc(CURRENT_VERSION)} ${esc(TARGET_VERSION)} ${esc(
-            DATA_DIR + '/data'
-        )}`
+        const cmd = `powershell ${esc(PathScript)} ${esc(DATA_DIR + '/' + SAVE_FILENAME)} ;pause`
         console.log(cmd)
-        await parent.window.betterncm.app.exec(cmd, 0, 1)
+        await parent.window.betterncm.app.exec(cmd, 1, 1)
     }
 </script>
 
@@ -182,6 +183,9 @@
         position: absolute;
         top: 30px;
         left: 50px;
+
+        opacity: 0;
+        pointer-events: none;
     }
 
     .title {
